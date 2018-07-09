@@ -7,9 +7,17 @@ html, body #appspace {
 }
 
 .footing {
-    font-size: 0.75em;
+    font-size: 0.56em;
     margin-top: 2.37em;
     font-style: italic;
+}
+
+.tumblrconsole {
+    font-family: monospace;
+    font-size: 0.75em;
+    padding: 1.33em;
+    margin: 1.33em;
+    overflow: auto;
 }
 
 .wrapper {
