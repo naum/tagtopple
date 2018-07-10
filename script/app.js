@@ -3,7 +3,10 @@ const TUMBLR_API_URL = 'http://azspot.net/api/read/json';
 class Wrapper extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { tumbdata: {} }
+        this.state = { 
+            tumbdata: {},
+            tagboard: {}
+        }
     }
     componentDidMount() {
         this.getTumblrData()
@@ -16,7 +19,8 @@ class Wrapper extends React.Component {
                 console.log(tdhash);
                 console.log(tdhash.tumblelog.title);
                 this.setState({
-                    tumbdata: tdhash
+                    tumbdata: tdhash,
+                    tagboard: tallyTumblrTags(tdhash)
                 })
             })
     }
@@ -31,13 +35,7 @@ class Wrapper extends React.Component {
             'div',
             { className: 'wrapper' },
             React.createElement(Header),
-            React.createElement(
-                TumblrConsole, 
-                { 
-                    title: title, 
-                    posts: posts, 
-                }
-            ),
+            React.createElement(TumblrTagBoard, { tb: this.state.tagboard }),
             React.createElement(Footer)
         )
     }
@@ -80,6 +78,20 @@ function TumblrPostListItem({ post }) {
         { className: 'postdumpline' },
         post['url-with-slug'] 
     )
+}
+
+function TumblrTagBoard({ tb }) {
+    console.log('Inside TumblrTagBoard(), tb=' + tb);
+    console.log(tb['politics']);
+    return React.createElement(
+        'div',
+        { className: 'tumblrtagboard' },
+        'Build a better board display!'
+    )
+}
+
+function tallyTumblrTags(tdhash) {
+    return { 'politics': 42 }
 }
 
 var container = document.querySelector('#appspace');
