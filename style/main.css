@@ -1,9 +1,37 @@
+a {
+    color: #E6F0F3;
+}
+
+a:hover, a:active {
+    color: #006180;
+    background-color: #BFD7DF;
+}
+
 html, body #appspace {
     margin: 0;
     padding: 0;
     background: #006180;
     height: 100%;
     color: white;
+    box-sizing: border-box;
+    text-shadow: 0.0625em 0.0625em 0.0625em #BFD7DF;
+}
+
+h1 {
+    text-shadow: 0.0625em 0.0625em 0.0625em #BFD7DF;
+}
+
+td, th {
+    padding: 0.16em 0.33em;
+}
+
+
+.celnum {
+    text-align: right;
+}
+
+.celtex {
+    text-align: left;
 }
 
 .footing {
@@ -12,12 +40,26 @@ html, body #appspace {
     font-style: italic;
 }
 
+.repoheading th {
+    border-top: 0.125em solid #FFFFFF;
+    border-bottom: 0.0625em solid #FFFFFF;
+    text-transform: uppercase;
+}
+
 .tumblrconsole {
     font-family: monospace;
     font-size: 0.75em;
     padding: 1.33em;
     margin: 1.33em;
     overflow: auto;
+}
+
+.wid25 { 
+    width: 25%;
+}
+
+.wid75 {
+    width: 75%;
 }
 
 .wrapper {

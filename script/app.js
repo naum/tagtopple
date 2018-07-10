@@ -1,18 +1,23 @@
-const TUMBLR_API_URL = 'http://azspot.net/api/read/json';
+const REPOCOL1 = { className: 'celtex wid75' };
+const REPOCOL2 = { className: 'celnum wid25' }
+const TUMBLR_API_URL = 'http://azspot.net/api/read/json/?num=50&start=';
+const TUMBLR_TAG_PRE = 'https://tumblr.com/tagged/';
 
 class Wrapper extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
             tumbdata: {},
-            tagboard: {}
+            tagboard: {},
+            startnum: 400
         }
     }
     componentDidMount() {
         this.getTumblrData()
     }
     getTumblrData() {
-        return fetch(TUMBLR_API_URL)
+        const apiurl = TUMBLR_API_URL + this.state.startnum;
+        return fetch(apiurl)
             .then(rsp => rsp.text())
             .then(data => {
                 const tdhash = JSON.parse(data.slice(22, -2));
@@ -20,17 +25,11 @@ class Wrapper extends React.Component {
                 console.log(tdhash.tumblelog.title);
                 this.setState({
                     tumbdata: tdhash,
-                    tagboard: tallyTumblrTags(tdhash)
+                    tagboard: tallyTumblrTags(tdhash, this.state.tagboard)
                 })
             })
     }
     render() {
-        let title = "Not set yet.";
-        let posts = [];
-        if (this.state.tumbdata && this.state.tumbdata.tumblelog) {
-            title = this.state.tumbdata.tumblelog.title;
-            posts = this.state.tumbdata.posts;
-        }
         return React.createElement(
             'div',
             { className: 'wrapper' },
@@ -53,7 +52,7 @@ function Header(props) {
     return React.createElement(
         'h1',
         { className: 'heading' },
-        'Welcome to Tag Topple!'
+        'Tumblr Tag Topple'
     )
 }
 
@@ -81,17 +80,77 @@ function TumblrPostListItem({ post }) {
 }
 
 function TumblrTagBoard({ tb }) {
-    console.log('Inside TumblrTagBoard(), tb=' + tb);
-    console.log(tb['politics']);
+    taglist = Object.keys(tb);
+    taglist.sort((a, b) =>
+        tb[b] - tb[a]
+    );
+    const tagrepolines = taglist.map(tag =>
+        React.createElement(
+            TumblrTagReportLine,
+            { tag: tag, total: tb[tag], key: tag }
+        )
+    )
     return React.createElement(
-        'div',
+        'table',
         { className: 'tumblrtagboard' },
-        'Build a better board display!'
+        React.createElement(
+            'tbody',
+            {}, 
+            React.createElement(TumblrTagReportHeading, {}),
+            tagrepolines
+        )
     )
 }
 
-function tallyTumblrTags(tdhash) {
-    return { 'politics': 42 }
+function TumblrTagReportHeading(props) {
+    return React.createElement(
+        'tr',
+        { className: 'repoheading' },
+        React.createElement('th', REPOCOL1, 'tag' ),
+        React.createElement('th', REPOCOL2, 'total' )
+    )
+}
+
+function TumblrTagReportLine({ tag, total }) {
+
+    return React.createElement(
+        'tr',
+        { className: 'repoline' },
+        React.createElement(
+            'td',
+            REPOCOL1,
+            a(TUMBLR_TAG_PRE + tag, tag)
+        ),
+        React.createElement(
+            'td',
+            REPOCOL2,
+            total
+        )
+    )
+}
+
+function a(u, d) {
+    return React.createElement(
+        'a',
+        { href: u },
+        d
+    )
+}
+
+function tallyTumblrTags(tdhash, prevtb) {
+    let tb = Object.assign({}, prevtb)
+    tdhash.posts.forEach(post => {
+        if (post.tags) {
+            post.tags.forEach(tag => {
+                if (tb[tag]) {
+                    tb[tag] += 1;
+                } else {
+                    tb[tag] = 1;
+                }
+            })
+        }
+    })
+    return tb;
 }
 
 var container = document.querySelector('#appspace');
