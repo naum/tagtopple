@@ -9,8 +9,9 @@ class Wrapper extends React.Component {
         this.state = { 
             tumbdata: {},
             tagboard: {},
-            startnum: 400
+            startnum: 0
         }
+        this.getTumblrData = this.getTumblrData.bind(this);
     }
     componentDidMount() {
         this.getTumblrData()
@@ -22,11 +23,17 @@ class Wrapper extends React.Component {
             .then(data => {
                 const tdhash = JSON.parse(data.slice(22, -2));
                 console.log(tdhash);
-                console.log(tdhash.tumblelog.title);
+                console.log('TITLE='+tdhash.tumblelog.title);
                 this.setState({
                     tumbdata: tdhash,
                     tagboard: tallyTumblrTags(tdhash, this.state.tagboard)
-                })
+                });
+                console.log('TOTAL POSTS='+tdhash['posts-total']);
+                const nextstart = this.state.startnum + 50;
+                if (nextstart < tdhash['posts-total']) {
+                    this.setState( { startnum: nextstart });
+                    setTimeout(this.getTumblrData, 5000);
+                }
             })
     }
     render() {
@@ -112,7 +119,6 @@ function TumblrTagReportHeading(props) {
 }
 
 function TumblrTagReportLine({ tag, total }) {
-
     return React.createElement(
         'tr',
         { className: 'repoline' },
