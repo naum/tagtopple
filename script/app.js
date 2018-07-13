@@ -1,6 +1,10 @@
-const REPOCOL1 = { className: 'celtex wid75' };
-const REPOCOL2 = { className: 'celnum wid25' }
-const TUMBLR_API_URL = 'http://azspot.net/api/read/json/?num=50&start=';
+const CE = React.createElement;
+const MAX_POSTS = 1000;
+const REPOCOL1 = { className: 'celnum wid16' };
+const REPOCOL2 = { className: 'celtex wid58' };
+const REPOCOL3 = { className: 'celnum wid25' };
+//const TUMBLR_API_URL = 'http://azspot.net/api/read/json/?num=50&start=';
+const TUMBLR_API_URL = 'http://ginacancellaro.tumblr.com/api/read/json/?num=50&start=';
 const TUMBLR_TAG_PRE = 'https://tumblr.com/tagged/';
 
 class Wrapper extends React.Component {
@@ -30,7 +34,7 @@ class Wrapper extends React.Component {
                 });
                 console.log('TOTAL POSTS='+tdhash['posts-total']);
                 const nextstart = this.state.startnum + 50;
-                if (nextstart < tdhash['posts-total']) {
+                if (nextstart < tdhash['posts-total'] && nextstart < MAX_POSTS) {
                     this.setState( { startnum: nextstart });
                     setTimeout(this.getTumblrData, 5000);
                 }
@@ -87,14 +91,14 @@ function TumblrPostListItem({ post }) {
 }
 
 function TumblrTagBoard({ tb }) {
-    taglist = Object.keys(tb);
+    let taglist = Object.keys(tb);
     taglist.sort((a, b) =>
         tb[b] - tb[a]
     );
-    const tagrepolines = taglist.map(tag =>
+    const tagrepolines = taglist.map((tag, i) =>
         React.createElement(
             TumblrTagReportLine,
-            { tag: tag, total: tb[tag], key: tag }
+            { rank: i + 1, tag: tag, total: tb[tag], key: tag }
         )
     )
     return React.createElement(
@@ -113,25 +117,19 @@ function TumblrTagReportHeading(props) {
     return React.createElement(
         'tr',
         { className: 'repoheading' },
-        React.createElement('th', REPOCOL1, 'tag' ),
-        React.createElement('th', REPOCOL2, 'total' )
+        React.createElement('th', REPOCOL1, '#'),
+        React.createElement('th', REPOCOL2, 'tag'),
+        React.createElement('th', REPOCOL3, 'total')
     )
 }
 
-function TumblrTagReportLine({ tag, total }) {
-    return React.createElement(
+function TumblrTagReportLine({ rank, tag, total }) {
+    return CE(
         'tr',
         { className: 'repoline' },
-        React.createElement(
-            'td',
-            REPOCOL1,
-            a(TUMBLR_TAG_PRE + tag, tag)
-        ),
-        React.createElement(
-            'td',
-            REPOCOL2,
-            total
-        )
+        CE('td', REPOCOL1, rank),
+        CE('td', REPOCOL2, a(TUMBLR_TAG_PRE + tag, tag)),
+        CE('td', REPOCOL3, total)
     )
 }
 
