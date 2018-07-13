@@ -26,7 +26,6 @@ class Wrapper extends React.Component {
         const apiurl = TUMBLR_API_URL + this.state.startnum;
         fetch(apiurl)
             .then(rsp => {
-                console.log(rsp);
                 if (rsp.ok) {
                     this.setState({ statmess: 'Response OK'});
                     return rsp.text()
