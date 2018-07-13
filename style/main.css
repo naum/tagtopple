@@ -46,6 +46,18 @@ td, th {
     text-transform: uppercase;
 }
 
+.statusmessage {
+    border: 0.0625em solid #006180;
+    border-radius: 0.25em;
+    padding: 0.16em 1.33em;
+    color: #006180;
+    font-weight: bold;
+    font-size: 0.75em;
+    background-color: #BFD7DF;
+    text-align: center;
+    margin: 0.33em auto 1.33em;
+}
+
 .tumblrconsole {
     font-family: monospace;
     font-size: 0.75em;

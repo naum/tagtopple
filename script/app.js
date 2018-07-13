@@ -3,14 +3,16 @@ const MAX_POSTS = 1000;
 const REPOCOL1 = { className: 'celnum wid16' };
 const REPOCOL2 = { className: 'celtex wid58' };
 const REPOCOL3 = { className: 'celnum wid25' };
-//const TUMBLR_API_URL = 'http://azspot.net/api/read/json/?num=50&start=';
-const TUMBLR_API_URL = 'http://ginacancellaro.tumblr.com/api/read/json/?num=50&start=';
+const TUMBLR_API_URL = 'http://azspot.net/api/read/json/?num=50&start=';
+//const TUMBLR_API_URL = 'http://gnacancellaro.tumblr.com/api/read/json/?num=50&start=';
 const TUMBLR_TAG_PRE = 'https://tumblr.com/tagged/';
 
 class Wrapper extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
+            error: null,
+            statmess: 'Welcome!',
             tumbdata: {},
             tagboard: {},
             startnum: 0
@@ -22,30 +24,49 @@ class Wrapper extends React.Component {
     }
     getTumblrData() {
         const apiurl = TUMBLR_API_URL + this.state.startnum;
-        return fetch(apiurl)
-            .then(rsp => rsp.text())
-            .then(data => {
-                const tdhash = JSON.parse(data.slice(22, -2));
-                console.log(tdhash);
-                console.log('TITLE='+tdhash.tumblelog.title);
-                this.setState({
-                    tumbdata: tdhash,
-                    tagboard: tallyTumblrTags(tdhash, this.state.tagboard)
-                });
-                console.log('TOTAL POSTS='+tdhash['posts-total']);
-                const nextstart = this.state.startnum + 50;
-                if (nextstart < tdhash['posts-total'] && nextstart < MAX_POSTS) {
-                    this.setState( { startnum: nextstart });
-                    setTimeout(this.getTumblrData, 5000);
+        fetch(apiurl)
+            .then(rsp => {
+                console.log(rsp);
+                if (rsp.ok) {
+                    this.setState({ statmess: 'Response OK'});
+                    return rsp.text()
+                } else {
+                    this.setState({ statmess: '404!' });
+                    console.log('we went 404!');
+                    return;
                 }
+            })
+            .then(data => {
+                if (data) {
+                    const tdhash = JSON.parse(data.slice(22, -2));
+                    console.log(tdhash);
+                    console.log('TITLE='+tdhash.tumblelog.title);
+                    this.setState({
+                        tumbdata: tdhash,
+                        tagboard: tallyTumblrTags(tdhash, this.state.tagboard)
+                    });
+                    console.log('TOTAL POSTS='+tdhash['posts-total']);
+                    const nextstart = this.state.startnum + 50;
+                    if (nextstart < tdhash['posts-total'] && nextstart < MAX_POSTS) {
+                        this.setState( { startnum: nextstart });
+                        setTimeout(this.getTumblrData, 5000);
+                    }
+                }
+            })
+            .catch(error => {
+                this.setState({
+                    statmess: error
+                })
             })
     }
     render() {
+        let { statmess, tagboard } = this.state;
         return React.createElement(
             'div',
             { className: 'wrapper' },
             React.createElement(Header),
-            React.createElement(TumblrTagBoard, { tb: this.state.tagboard }),
+            CE(StatusMessage, { m: statmess }),
+            React.createElement(TumblrTagBoard, { tb: tagboard }),
             React.createElement(Footer)
         )
     }
@@ -64,6 +85,14 @@ function Header(props) {
         'h1',
         { className: 'heading' },
         'Tumblr Tag Topple'
+    )
+}
+
+function StatusMessage({ m }) {
+    return CE (
+        'div',
+        { className: 'statusmessage' },
+        m 
     )
 }
 
