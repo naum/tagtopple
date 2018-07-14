@@ -66,12 +66,40 @@ td, th {
     overflow: auto;
 }
 
+.wid16 {
+    width: 16%;
+}
+
 .wid25 { 
     width: 25%;
 }
 
+.wid33 {
+    width: 33%;
+}
+
+.wid42 {
+    width: 42%;
+}
+
+.wid50 {
+    width: 50%;
+}
+
+.wid58 {
+    width: 58%;
+}
+
+.wid66 {
+    width: 66%;
+}
+
 .wid75 {
     width: 75%;
+}
+
+.wid83 {
+    width: 83%;
 }
 
 .wrapper {
