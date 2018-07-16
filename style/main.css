@@ -7,6 +7,27 @@ a:hover, a:active {
     background-color: #BFD7DF;
 }
 
+button {
+    color: #E6F0F3;
+    background: transparent;
+    border: 0.125em solid #E6F0F3;
+    border-radius: 0.375em;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+button:hover {
+    color: white;
+    background-color: #004960;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: 100%;
+}
+
 html, body #appspace {
     margin: 0;
     padding: 0;
@@ -19,6 +40,16 @@ html, body #appspace {
 
 h1 {
     text-shadow: 0.0625em 0.0625em 0.0625em #BFD7DF;
+}
+
+input {
+    background: transparent;
+    color: #FFFFFF;
+    margin: auto 0.25em;
+    border-radius: 0.375em;
+    border: 0.125em solid #FFFFFF;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
 }
 
 td, th {
@@ -34,9 +65,18 @@ td, th {
     text-align: left;
 }
 
+
+.controlpanel {
+    margin-bottom: 0.625em;
+}
+
+.controlinput input {
+    width: 12em;
+}
+
 .footing {
     font-size: 0.56em;
-    margin-top: 2.37em;
+    margin-top: 3.16em;
     font-style: italic;
 }
 
@@ -64,6 +104,10 @@ td, th {
     padding: 1.33em;
     margin: 1.33em;
     overflow: auto;
+}
+
+.urlpre {
+    color: #BFBFBF;
 }
 
 .wid16 {

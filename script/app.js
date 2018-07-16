@@ -3,9 +3,8 @@ const MAX_POSTS = 1000;
 const REPOCOL1 = { className: 'celnum wid16' };
 const REPOCOL2 = { className: 'celtex wid58' };
 const REPOCOL3 = { className: 'celnum wid25' };
-const TUMBLR_API_URL = 'http://azspot.net/api/read/json/?num=50&start=';
-//const TUMBLR_API_URL = 'http://gnacancellaro.tumblr.com/api/read/json/?num=50&start=';
 const TUMBLR_TAG_PRE = 'https://tumblr.com/tagged/';
+const TUMBLR_API_QS = '/api/read/json/?num=50&start='
 
 class Wrapper extends React.Component {
     constructor(props) {
@@ -27,7 +26,8 @@ class Wrapper extends React.Component {
         console.log('Inside componentDidMount...');
     }
     getTumblrData() {
-        const apiurl = TUMBLR_API_URL + this.state.startnum;
+        const apiurl = 'https://' + this.state.tumbsite + TUMBLR_API_QS + this.state.startnum;
+        console.log('apiurl=' + apiurl);
         fetch(apiurl)
             .then(rsp => {
                 if (rsp.ok) {
@@ -63,10 +63,13 @@ class Wrapper extends React.Component {
             })
     }
     handleSiteChange(e) {
-        console.log('Inside handleSiteChange...');
+        this.setState({
+            tumbsite: e.target.value
+        })
     }
     handleSiteFetch(e) {
-        console.log('Inside handleSiteFetch...');
+        this.getTumblrData();
+        //console.log('Inside handleSiteFetch()...');
     }
     render() {
         let { statmess, tagboard } = this.state;
@@ -93,6 +96,11 @@ function ControlPanel(props) {
     return CE(
         'div',
         { className: 'controlpanel'},
+        CE(
+            'span',
+            { className: 'urlpre' },
+            'https://'
+        ),
         CE(
             'input',
             { type: 'text', onChange: handleSiteChange }
