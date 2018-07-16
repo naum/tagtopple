@@ -1,7 +1,7 @@
 const CE = React.createElement;
 const MAX_POSTS = 1000;
-const REPOCOL1 = { className: 'celnum wid16' };
-const REPOCOL2 = { className: 'celtex wid58' };
+const REPOCOL1 = { className: 'celnum wid8' };
+const REPOCOL2 = { className: 'celtex wid66' };
 const REPOCOL3 = { className: 'celnum wid25' };
 const TUMBLR_TAG_PRE = 'https://tumblr.com/tagged/';
 const TUMBLR_API_QS = '/api/read/json/?num=50&start='

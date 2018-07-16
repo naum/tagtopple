@@ -70,8 +70,8 @@ td, th {
     margin-bottom: 0.625em;
 }
 
-.controlinput input {
-    width: 12em;
+.controlpanel input {
+    width: 15em;
 }
 
 .footing {
