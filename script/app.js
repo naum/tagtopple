@@ -15,12 +15,16 @@ class Wrapper extends React.Component {
             statmess: 'Welcome!',
             tumbdata: {},
             tagboard: {},
+            tumbsite: null,
             startnum: 0
         }
         this.getTumblrData = this.getTumblrData.bind(this);
+        this.handleSiteChange = this.handleSiteChange.bind(this);
+        this.handleSiteFetch = this.handleSiteFetch.bind(this);
     }
     componentDidMount() {
-        this.getTumblrData()
+        //this.getTumblrData()
+        console.log('Inside componentDidMount...');
     }
     getTumblrData() {
         const apiurl = TUMBLR_API_URL + this.state.startnum;
@@ -58,17 +62,47 @@ class Wrapper extends React.Component {
                 })
             })
     }
+    handleSiteChange(e) {
+        console.log('Inside handleSiteChange...');
+    }
+    handleSiteFetch(e) {
+        console.log('Inside handleSiteFetch...');
+    }
     render() {
         let { statmess, tagboard } = this.state;
-        return React.createElement(
+        return CE(
             'div',
             { className: 'wrapper' },
-            React.createElement(Header),
+            CE(Header),
+            CE(
+                ControlPanel,
+                { 
+                    handleSiteChange: this.handleSiteChange,
+                    handleSiteFetch: this.handleSiteFetch,
+                }
+            ),
             CE(StatusMessage, { m: statmess }),
-            React.createElement(TumblrTagBoard, { tb: tagboard }),
-            React.createElement(Footer)
+            CE(TumblrTagBoard, { tb: tagboard }),
+            CE(Footer)
         )
     }
+}
+
+function ControlPanel(props) {
+    let { handleSiteChange, handleSiteFetch } = props;
+    return CE(
+        'div',
+        { className: 'controlpanel'},
+        CE(
+            'input',
+            { type: 'text', onChange: handleSiteChange }
+        ),
+        CE(
+            'button',
+            { onClick: handleSiteFetch },
+            'Go'
+        )
+    )
 }
 
 function Footer(props) {
